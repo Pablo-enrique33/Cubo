@@ -734,7 +734,8 @@ class Cube {
 
     if ( this.size !== this.sizeGenerated || force ) {
 
-      this.size = this.game.preferences.ranges.size.value;
+      this.size = 3;
+
 
       this.reset();
       this.init();
@@ -2627,22 +2628,16 @@ class Preferences {
 
     this.ranges = {
 
-      size: new Range( 'size', {
-        value: this.game.cube.size,
-        range: [ 2, 5 ],
+      scramble: new Range( 'scramble', {
+        value: this.game.scrambler.dificulty,
+        range: [ 0, 2 ],
         step: 1,
         onUpdate: value => {
 
-          this.game.cube.size = value;
-
-          this.game.preferences.ranges.scramble.list.forEach( ( item, i ) => {
-
-            item.innerHTML = this.game.scrambler.scrambleLength[ this.game.cube.size ][ i ];
-
-          } );
+          this.game.scrambler.dificulty = value;
 
         },
-        onComplete: () => this.game.storage.savePreferences(),
+        onComplete: () => this.game.storage.savePreferences()
       } ),
 
       flip: new Range( 'flip', {
@@ -2657,29 +2652,7 @@ class Preferences {
         onComplete: () => this.game.storage.savePreferences(),
       } ),
 
-      scramble: new Range( 'scramble', {
-        value: this.game.scrambler.dificulty,
-        range: [ 0, 2 ],
-        step: 1,
-        onUpdate: value => {
-
-          this.game.scrambler.dificulty = value;
-
-        },
-        onComplete: () => this.game.storage.savePreferences()
-      } ),
-
-      fov: new Range( 'fov', {
-        value: this.game.world.fov,
-        range: [ 2, 45 ],
-        onUpdate: value => {
-
-          this.game.world.fov = value;
-          this.game.world.resize();
-
-        },
-        onComplete: () => this.game.storage.savePreferences()
-      } ),
+    
 
       theme: new Range( 'theme', {
         value: { cube: 0, erno: 1, dust: 2, camo: 3, rain: 4 }[ this.game.themes.theme ],
@@ -3022,9 +2995,6 @@ class Scores {
     this.setStat( 'total-solves', data.solves );
     this.setStat( 'best-time', this.convertTime( data.best ) );
     this.setStat( 'worst-time', this.convertTime( data.worst ) );
-    this.setStat( 'average-5', this.getAverage( 5 ) );
-    this.setStat( 'average-12', this.getAverage( 12 ) );
-    this.setStat( 'average-25', this.getAverage( 25 ) );
 
   }
 
