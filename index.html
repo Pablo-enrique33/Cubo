@@ -100,45 +100,84 @@
       fala.classList.add("ativa");
     }
 
-	function sorakaFalaPorEixo(eixo, direcao) {
-  const frasesPorEixo = {
-    xPositiva: [
-      "Não. eu não vou te salvar.",
-      "Você está indo para o lado certo!",
-      "Continue assim!",
-      "Sábia decisão, viajante!"
-    ],
-    xNegativa: [
-      "A cada passo, uma nova jornada!",
-      "Seguindo um novo caminho!",
-      "Para curar e proteger.",
-      "Você manda bem Slowzinha"
-    ],
-    yPositiva: [
-      "O mundo inteiro em equilíbrio.",
-      "Você se eleva como as estrelas!",
-      "Estrelas, escutem-me!",
-      "A energia cresce com esse giro!"
-    ],
-    yNegativa: [
-      "O mundo inteiro em equilíbrio.",
-      "Belo movimento!",
-      "Cada giro revela um novo caminho.",
-      "Continue assim"
-    ]
-  };
+  const ultimaFraseUsada = {
+  xPositiva: null,
+  xNegativa: null,
+  yPositiva: null,
+  yNegativa: null
+};
 
-  const chave = eixo + (direcao > 0 ? 'Positiva' : 'Negativa');
-  const frases = frasesPorEixo[chave] || [];
-  if (frases.length > 0) {
-    const frase = frases[Math.floor(Math.random() * frases.length)];
-    sorakaFala(frase); // Essa função mostra o balão da Soraka
+const frasesPorEixo = {
+  xPositiva: [
+    "Não. eu não vou te salvar.",
+    "Você está indo para o lado certo!",
+    "Continue assim!",
+    "Meu Qilin gosta de você!"
+  ],
+  xNegativa: [
+    "A cada passo, uma nova jornada!",
+    "Seguindo um novo caminho!",
+    "Para curar e proteger.",
+    "Você manda bem Slowzinha"
+  ],
+  yPositiva: [
+    "O mundo inteiro em equilíbrio.",
+    "Você se eleva como as estrelas!",
+    "Estrelas, escutem-me!",
+    "A energia cresce com esse giro!"
+  ],
+  yNegativa: [
+    "O mundo inteiro em equilíbrio.",
+    "Belo movimento!",
+    "Cada giro revela um novo caminho.",
+    "Continue assim, Slowzinha!"
+  ]
+};
+
+function temRepeticaoExcessiva(frase) {
+  const palavras = frase.toLowerCase().split(/\s+/);
+  for (let i = 0; i < palavras.length - 1; i++) {
+    if (palavras[i] === palavras[i + 1]) {
+      return true;
+    }
   }
-  
+  return false;
 }
+
+function sorakaFala(frase) {
+  const fala = document.getElementById("fala-soraka");
+  if (!fala) return;
+  fala.innerText = frase;
+  fala.classList.remove("ativa");
+  void fala.offsetWidth;
+  fala.classList.add("ativa");
+}
+
+function sorakaFalaPorEixo(eixo, direcao) {
+  const chave = eixo + (direcao > 0 ? 'Positiva' : 'Negativa');
+  const frases = frasesPorEixo[chave];
+  if (!frases || frases.length === 0) return;
+
+  let tentativa = 0;
+  let frase;
+
+  do {
+    frase = frases[Math.floor(Math.random() * frases.length)];
+    tentativa++;
+  } while (
+    (frase === ultimaFraseUsada[chave] || temRepeticaoExcessiva(frase)) &&
+    tentativa < 10
+  );
+
+  ultimaFraseUsada[chave] = frase;
+  sorakaFala(frase);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   sorakaFala("Preparada Slowzinha?");
 });
+
+
 
 
 </script>
