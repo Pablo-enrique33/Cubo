@@ -672,7 +672,7 @@ class Cube {
 
   constructor( game ) {
 
-    this.game = game;
+    this.game = game; 
     this.size = 3;
 
     this.geometry = {
@@ -3776,6 +3776,7 @@ class Game {
 
     this.storage.loadGame();
     this.scores.calcStats();
+    
 
     setTimeout( () => {
 
